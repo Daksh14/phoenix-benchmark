@@ -107,5 +107,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Elapsed time: {:.2?}", before.elapsed());
 
+    let before = Instant::now();
+
+    all_notes.chunks_exact(632).for_each(|bytes| {
+        let OldTreeLeaf { block_height, note } = match rkyv::from_bytes(bytes).ok() {
+            Some(a) => a,
+            None => {
+                panic!("failed to deserialize note");
+            }
+        };
+    });
+
+    println!("Elapsed time for no check: {:.2?}", before.elapsed());
+
     Ok(())
 }
