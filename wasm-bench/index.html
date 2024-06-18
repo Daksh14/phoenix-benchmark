@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAssembly Benchmark</title>
+</head>
+<body>
+    <h1>WebAssembly Benchmark</h1>
+    <script>
+        // Function to fetch and instantiate the WebAssembly module
+        async function loadWasmModule(url, importObject) {
+            const response = await fetch(url);
+            const bytes = await response.arrayBuffer();
+            const results = await WebAssembly.instantiate(bytes, importObject);
+            return results.instance;
+        }
+
+        // Load the wasm module and execute the 'sync' function
+        (async () => {
+            const importObject = {}; // Define any necessary imports here
+            const wasmModuleUrl = 'target/wasm32-unknown-unknown/release/wasm_bench.wasm';
+
+            try {
+                const wasmInstance = await loadWasmModule(wasmModuleUrl, importObject);
+                
+                // Ensure the 'sync' function exists in the wasm module
+                if (wasmInstance.exports.sync) {
+                    // Measure execution time of the 'sync' function
+                    const start = performance.now();
+                    wasmInstance.exports.sync();
+                    const end = performance.now();
+                    
+                    console.log(`Execution time: ${(end - start).toFixed(2)} ms`);
+                } else {
+                    console.error("Function 'sync' not found in the wasm module");
+                }
+            } catch (error) {
+                console.error("Error loading or executing wasm module:", error);
+            }
+        })();
+    </script>
+</body>
+</html>
+
