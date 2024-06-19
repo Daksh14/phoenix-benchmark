@@ -3,9 +3,32 @@ name = "benchmark"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "benchmark"
+path = "src/lib.rs"
+
+[[bin]]
+name = "download-state"
+path = "src/download-state.rs"
+
+[[bin]]
+name = "old"
+path = "src/old.rs"
+
+[[bin]]
+name = "new"
+path = "src/new.rs"
+
+[[bin]]
+name = "new-sync"
+path = "src/new-sync.rs"
+
+[[bin]]
+name = "nop"
+path = "src/nop.rs"
 
 [dependencies]
+clap = { version = "4.5.7", features = ["derive"] }
 old_phoenix = { package = "phoenix-core", version = "0.21", default-features = false, features = [
     "alloc",
     "rkyv-impl",
@@ -16,12 +39,16 @@ dusk-pki = { version = "0.13", default-features = false, features = [
 dusk-wallet-core = { path = "../wallet-core" }
 reqwest = { version = "0.12.4", features = ["stream"] }
 rkyv = "0.7.39"
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["io-util", "fs", "rt-multi-thread", "macros"] }
 anyhow = "1.0"
 wasmer = "=3.1"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 futures-util = "0.3.30"
+phoenix-core-sync = { package = "phoenix-core", path = "../phoenix/core", default-features = false, features = [
+    "alloc",
+    "rkyv-impl"
+]}
 phoenix-core = { version = "0.26", default-features = false, features = [
     "alloc",
     "rkyv-impl",
@@ -29,3 +56,5 @@ phoenix-core = { version = "0.26", default-features = false, features = [
 sha2 = { version = "^0.10", default-features = false }
 rand_chacha = { version = "^0.3", default-features = false }
 rand_core = "^0.6"
+dusk-jubjub = "0.14.1"
+ff = "0.13.0"

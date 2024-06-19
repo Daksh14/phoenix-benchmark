@@ -1,0 +1,20 @@
+[package]
+name = "wasm-bench"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+phoenix-core = { version = "0.21", default-features = false, features = ["alloc", "rkyv-impl"] }
+dusk-pki = { version = "0.13", default-features = false, features = ["rkyv-impl"] }
+
+rkyv = { version = "0.7.39", default-features = false, features = ["size_32"] }
+
+rand_chacha = { version = "0.3", default-features = false }
+rand_core = "0.6"
+
+sha2 = { version = "0.10", default-features = false }
+
+dlmalloc = { version = "0.2", features = ["global"] }
